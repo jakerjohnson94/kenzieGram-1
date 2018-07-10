@@ -2,7 +2,6 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-
 const publicPath = './public/';
 const port = 3000;
 const app = express();
@@ -32,51 +31,63 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage, dest: publicPath, fileFilter: fileFilter });
 
 app.get('/', function(req, res) {
-  const path = './public/uploads';
-  fs.readdir(path, function(err, items) {
+  fs.readdir('./public/uploads', function(err, items) {
     if (err) console.log(err);
     items = items.slice(1, items.length).sort((a, b) => a < b);
 
     res.send(`
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <h1>Welcome to Kylegram!</h1> 
-    ${formTemplate}
-
-    <ul>
+    ${displayTemplate}
+   
+    <div class='container row'>
     ${getPics(items)}
-    </ul>`);
+    </div>
+    `);
   });
 });
 
 app.post('/public/uploads', upload.single('myFile'), function(req, res, next) {
   // req.file is the `myFile` file
   // req.body will hold the text fields, if there were any
-  console.log('Uploaded: ' + req.file.filename);
-  path.extname(req.file.originalname);
-  uploadedFiles.push(req.file.filename);
-  res.send(`
-  <h2>Success!</h2>
-  <a href='http://localhost:${port}'> Back </a>
-  `);
+  if (!req.file) {
+    res.send(console.log('error, no file to upload'));
+  } else {
+    console.log('Uploaded: ' + req.file.filename);
+    path.extname(req.file.originalname);
+    uploadedFiles.push(req.file.filename);
+    res.send(successTemplate);
+  }
 });
 
-app.listen(port, () => console.log('Example app listening on port 3000!'));
+app.listen(port, () => console.log('Server listening on port 3000!'));
 
 function getPics(items) {
   let result = '';
   for (item of items) {
-    result += `<li> <img src='./uploads/${item}'> </li>`;
+    result += `<div class ='col s4'>  <img src='./uploads/${item}'></div>`;
   }
   return result;
 }
 
 const formTemplate = `  
- <form method="post" action="/public/uploads" enctype="multipart/form-data">
+ <form class='center' method="post" action="/public/uploads" enctype="multipart/form-data">
       <div>
         <label for="file">Choose a file</label>
         <input type="file" id="file" name="myFile">
       </div>
       <div>
-        <button id='submit' type="submit"> Upload File</button>
+        <button class='btn ' id='submit' type="submit"> Upload New Picture </button>
       </div>
     </form>`;
+const displayTemplate = `
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="sass/materialize.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+  <h1 class='center'>Kenziegram</h1> 
+  ${formTemplate}`;
+
+const successTemplate = `
+
+    <h2 class='center'>Success!</h2>
+    <a href='http://localhost:${port}'> Back </a>
+    `;

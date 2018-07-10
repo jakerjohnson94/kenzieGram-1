@@ -1,4 +1,7 @@
 img {
-  height: 150px;
-  width: 150px;
+  height: 28vh;
+}
+
+li {
+  text-decoration: none;
 }
