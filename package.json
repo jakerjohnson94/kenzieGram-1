@@ -1,7 +1,6 @@
 {
   "name": "kenziegram-1",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,5 +12,15 @@
     "fs": "0.0.1-security",
     "multer": "^1.3.1",
     "path": "^0.12.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakerjohnson94/kenzieGram-1.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/jakerjohnson94/kenzieGram-1/issues"
+  },
+  "homepage": "https://github.com/jakerjohnson94/kenzieGram-1#readme",
+  "description": ""
 }
